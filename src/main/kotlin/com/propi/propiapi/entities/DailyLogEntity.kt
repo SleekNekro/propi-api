@@ -1,13 +1,6 @@
 package com.propi.propiapi.entities
 
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.OneToOne
-import jakarta.persistence.Table
+import jakarta.persistence.*
 
 @Entity
 @Table(name="daily_log")
@@ -17,7 +10,7 @@ class DailyLogEntity (
     val id: Long?=null,
 
     val date: String,
-    val completed: Boolean,
+    var completed: Boolean,
     val karmaPoints: Float
 ){
     @ManyToOne

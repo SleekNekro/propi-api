@@ -14,12 +14,10 @@ interface RestPeriodRepository: JpaRepository<RestPeriodEntity, Long> {
     SELECT rp
     FROM RestPeriodEntity rp
     WHERE rp.user.id = :userId
-      AND rp.dateIni >= :startDate
-      AND rp.dateEnd <= :endDate
+      AND rp.dateIni <= :date AND rp.dateEnd >= :date
     """)
     fun findRestPeriodActive_Date(
         @Param("userId")userId: Long,
-        @Param("startDate")startDate: String,
-        @Param("endDate")endDate: String,
+        @Param("date")date: String,
     ): List<RestPeriodEntity>
 }
