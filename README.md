@@ -10,7 +10,15 @@ http://localhost:8080/api
 
 ## Autenticación
 
-> ⚠️ **Nota**: La seguridad JWT está en desarrollo. Actualmente los endpoints requieren el `userId` en la URL.
+> ⚠️ **Nota**: Todos los endpoints (excepto `/api/auth/register` y `/api/auth/login`) requieren autenticación JWT.
+
+### Flujo de autenticación
+
+1. **Registrar** usuario → recibe token JWT
+2. **Login** → recibe token JWT
+3. Usar token en header `Authorization: Bearer <token>`
+
+---
 
 ### Registro de usuario
 
@@ -31,9 +39,12 @@ Content-Type: application/json
 
 ```json
 {
-  "id": 1,
-  "username": "john",
-  "email": "john@example.com"
+  "token": "eyJhbGciOiJIUzI1NiJ9...",
+  "user": {
+    "id": 1,
+    "username": "john",
+    "email": "john@example.com"
+  }
 }
 ```
 
@@ -55,11 +66,22 @@ Content-Type: application/json
 
 ```json
 {
-  "id": 1,
-  "username": "john",
-  "email": "john@example.com"
+  "token": "eyJhbGciOiJIUzI1NiJ9...",
+  "user": {
+    "id": 1,
+    "username": "john",
+    "email": "john@example.com"
+  }
 }
 ```
+
+### Usar el token
+
+Todos los endpoints protegidos requieren el token:
+
+```http
+GET /api/users/1/habits
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...
 
 ## Endpoints
 
@@ -588,9 +610,10 @@ data class UserResponseDTO(
 - **Kotlin** - Lenguaje de programación
 - **Spring Boot** - Framework web
 - **Spring Data JPA** - Persistencia
-- **PostgreSQL** - Base de datos
-- **JWT** - Autenticación (en desarrollo)
+- **PostgreSQL** - Base de datos (H2 para desarrollo)
+- **JWT** - Autenticación con tokens
 - **kotlinx.serialization** - Serialización JSON
+- **Spring Security** - Seguridad
 
 ---
 
