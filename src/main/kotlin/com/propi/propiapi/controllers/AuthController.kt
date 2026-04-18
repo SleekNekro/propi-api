@@ -1,5 +1,6 @@
 package com.propi.propiapi.controllers
 
+import com.propi.propiapi.config.JwtTokenProvider
 import com.propi.propiapi.services.UserService
 import com.propi.shared.dto.RegisterDTO
 import com.propi.shared.dto.request.UserRequestDTO
@@ -11,17 +12,22 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/auth")
 class AuthController(
-    private val userService: UserService
+    private val userService: UserService,
+    private val jwtTokenProvider: JwtTokenProvider
 ) {
     @PostMapping("/register")
-    fun register(@RequestBody request: RegisterDTO): ResponseEntity<UserResponseDTO> =
-        ResponseEntity.status(HttpStatus.CREATED)
-            .body(userService.register(request))
+    fun register(@RequestBody request: RegisterDTO): ResponseEntity<LoginResponse> {
+        val user = userService.register(request)
+        val token = jwtTokenProvider.generateToken(user.id, user.email)
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(LoginResponse(token, user))
+    }
 
     @PostMapping("/login")
-    fun login(@RequestBody request: RegisterDTO): ResponseEntity<UserResponseDTO> {
-        val user = userService.findByEmail(request.email)
-        return ResponseEntity.ok(user)
+    fun login(@RequestBody request: RegisterDTO): ResponseEntity<LoginResponse> {
+        val user = userService.authenticate(request.email, request.password)
+        val token = jwtTokenProvider.generateToken(user.id, user.email)
+        return ResponseEntity.ok(LoginResponse(token, user))
     }
 
     @GetMapping("/users/{id}")
@@ -41,3 +47,8 @@ class AuthController(
         return ResponseEntity.noContent().build()
     }
 }
+
+data class LoginResponse(
+    val token: String,
+    val user: UserResponseDTO
+)

@@ -12,6 +12,7 @@ interface UserService {
     fun findAll(): List<UserResponseDTO>
     fun findById(id: Long): UserResponseDTO
     fun findByEmail(email: String): UserResponseDTO
+    fun authenticate(email: String, password: String): UserResponseDTO
     fun register(request: RegisterDTO): UserResponseDTO
     fun update(id: Long, request: UserRequestDTO): UserResponseDTO
     fun delete(id: Long)
@@ -36,6 +37,17 @@ class UserServiceImpl(
         userRepository.findByEmail(email)
             ?.toResponse()
             ?: throw NoSuchElementException("User not found with email: $email")
+
+    override fun authenticate(email: String, password: String): UserResponseDTO {
+        val user = userRepository.findByEmail(email)
+            ?: throw IllegalArgumentException("Invalid email or password")
+
+        if (!passwordEncoder.matches(password, user.hashPassword)) {
+            throw IllegalArgumentException("Invalid email or password")
+        }
+
+        return user.toResponse()
+    }
 
     override fun register(request: RegisterDTO): UserResponseDTO {
         if (userRepository.findByEmail(request.email) != null) {
