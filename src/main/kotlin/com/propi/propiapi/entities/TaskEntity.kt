@@ -10,7 +10,7 @@ import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 
 @Entity
-@Table(name="tasks")
+@Table(name = "tasks")
 class TaskEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,9 +19,8 @@ class TaskEntity(
     val name: String,
     val dateTime: String,
     val completed: Boolean
-){
+) {
     @ManyToOne
     @JoinColumn(name = "user_id")
     lateinit var user: UserEntity
-
 }

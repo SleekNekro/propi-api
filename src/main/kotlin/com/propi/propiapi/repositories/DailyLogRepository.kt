@@ -8,12 +8,12 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface DailyLogRepository: JpaRepository<DailyLogEntity, Long> {
-    fun findAllByHabits_Id(habitId: Long): List<DailyLogEntity>
+    fun findAllByHabit_Id(habitId: Long): List<DailyLogEntity>
 
     @Query("""
         SELECT dl
         FROM DailyLogEntity dl
-        WHERE dl.habits.user.id = :userId
+        WHERE dl.habit.user.id = :userId
         AND dl.date BETWEEN :startDate AND :endDate
         ORDER BY dl.date ASC
     """)
@@ -23,7 +23,7 @@ interface DailyLogRepository: JpaRepository<DailyLogEntity, Long> {
         @Param("endDate")endDate: String,
     ): List<DailyLogEntity>
 
-    fun findByHabits_IdAndDate(habitId: Long, date: String): DailyLogEntity?
+    fun findByHabit_IdAndDate(habitId: Long, date: String): DailyLogEntity?
 
-    fun existsByHabits_IdAndDate(habitsId: Long, date: String): Boolean
+    fun existsByHabit_IdAndDate(habitsId: Long, date: String): Boolean
 }

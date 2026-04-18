@@ -31,13 +31,13 @@ class DailyLogServiceImpl(
                     date = entity.date,
                     completed = entity.completed,
                     karmaPoints = entity.karmaPoints,
-                    habitId = entity.habits?.id,
+                    habitId = entity.habit?.id,
                     taskId = entity.task?.id
                 )
             }
 
     override fun markCompleted(habitId: Long, date: String, completed: Boolean) {
-        val log = dailyLogRepository.findByHabits_IdAndDate(habitId, date)
+        val log = dailyLogRepository.findByHabit_IdAndDate(habitId, date)
             ?: throw RuntimeException("DailyLog not found")
 
         log.completed = completed

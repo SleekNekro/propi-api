@@ -10,14 +10,14 @@ import jakarta.persistence.Table
 
 @Entity
 @Table(name = "rest_period")
-class RestPeriodEntity (
+class RestPeriodEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long?=null,
+    val id: Long? = null,
 
     val dateIni: String,
     val dateEnd: String
-){
+) {
     @ManyToOne
     @JoinColumn(name = "user_id")
     lateinit var user: UserEntity
